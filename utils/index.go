@@ -2,7 +2,8 @@ package utils
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"time"
 
 	"github.com/chromedp/chromedp"
 )
@@ -37,19 +38,25 @@ func OpenBrowser(url string) error {
 	// defer cancel()
 
 	// navigate to a page, wait for an element, click
-	var example string
+	// var example string
+	println("打开浏览器:", url)
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(url),
 		// wait for footer element is visible (ie, page is loaded)
-		chromedp.WaitVisible(`body > footer`),
+		// chromedp.WaitVisible(`body > footer`),
 		// find and click "Example" link
 		//chromedp.Click(`#example-After`, chromedp.NodeVisible),
 		// retrieve the text of the textarea
 		//chromedp.Value(`#example-After textarea`, &example),
 	)
+
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("发生错误：%v\n", err)
 	}
-	log.Printf("Go's time.After example:\n%s", example)
+	println("浏览器已打开")
+	//睡眠20秒后退出
+	time.Sleep(10 * time.Second)
+	println("关闭浏览器:", url)
+	// log.Printf("Go's time.After example:\n%s", example)
 	return nil
 }

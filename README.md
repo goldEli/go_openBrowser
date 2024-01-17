@@ -2,10 +2,10 @@
 # build
 ```shell
 # build liunx
-env GOOS=linux GOARCH=amd64 go build -o openBrowser main.go
+env GOOS=linux GOARCH=amd64 go build -o openBrowserTool main.go
 
 # build windows
- go build -o openBrowser.exe main.go
+go build -o openBrowserTool.exe main.go
 ```
 
 # execute
