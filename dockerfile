@@ -1,23 +1,16 @@
-# # =============== build stage ===============
-# FROM golang:1.16.5-buster AS build
-# WORKDIR /app
+# FROM node:12-alpine
+# FROM alpine:3.14
+# FROM ops-harbor.staryuntech.com/sre/maven-openjdk8:20230717 AS builder
+FROM centos:7
 
-# COPY go.* ./
-# RUN go mod download -x all
-
-# COPY . ./
-# # ldflags:
-# #  -s: disable symbol table
-# #  -w: disable DWARF generation
-# # run `go tool link -help` to get the full list of ldflags
-# RUN go build -ldflags "-s -w" -o the-excellent-app -v path/to/main.go
-
-# =============== final stage ===============
-FROM chromedp/headless-shell:93.0.4535.3 AS final
-
+# 设置工作目录
 WORKDIR /app
 
-COPY . ./
-# COPY --from=build /app/the-excellent-app ./
-# ENTRYPOINT ["/app/the-excellent-app", "-other", "flags"]
+# 复制本地文件到容器
+COPY . .
+
+
+# RUN apk add chromium
+
+RUN yum install chromium
 

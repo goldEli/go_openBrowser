@@ -1,37 +1,31 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"net/http"
 	"openBrowserTool/utils"
-	"os"
 )
 
-func main() {
-	// 定义命令行参数
-	urlFlag := flag.String("url", "", "URL to open in the browser")
+func handleDownload(w http.ResponseWriter, r *http.Request) {
+	// 获取名为 "url" 的查询参数
+	urlParam := r.URL.Query().Get("url")
 
-	// 解析命令行参数
-	flag.Parse()
-
-	// 获取解析后的参数值
-	url := *urlFlag
-
-	if url == "" {
-		fmt.Println("请提供要打开的URL，使用 -url 参数")
-		os.Exit(1)
+	if urlParam == "" {
+		http.Error(w, "参数 'url' 不能为空", http.StatusBadRequest)
+		return
 	}
 
-	println(url)
+	fmt.Fprint(w, "url:", urlParam)
+	print("url:", urlParam)
+	print("start===>")
+	utils.OpenBrowser(urlParam)
+}
 
-	utils.OpenBrowser(url)
-	// 打开默认浏览器
-	// cmd := exec.Command("open", url)
-	// err := cmd.Run()
-	// if err != nil {
-	// 	fmt.Println("无法打开浏览器:", err)
-	// 	os.Exit(1)
-	// }
+func main() {
+	// 设置路由
+	http.HandleFunc("/download", handleDownload)
 
-	// fmt.Printf("正在打开浏览器：%s\n", url)
+	// 启动HTTP服务，监听在8080端口
+	fmt.Println("服务启动，监听在 http://localhost:8080/download")
+	http.ListenAndServe(":8080", nil)
 }
